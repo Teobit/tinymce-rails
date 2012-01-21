@@ -2,13 +2,18 @@ require 'rubygems'
 require 'rake'
 require 'rubygems/package_task'
 
+$:.push File.expand_path('../lib', __FILE__)
+require 'tinymce/rails/version'
+
 gemspec = eval(File.read('locomotive-tinymce-rails.gemspec'))
 Gem::PackageTask.new(gemspec) do |pkg|
   pkg.gem_spec = gemspec
 end
 
-$:.push File.expand_path('../lib', __FILE__)
-require 'tinymce/rails/version'
+desc 'build the gem and release it to rubygems.org'
+task :release => :gem do
+  sh "gem push pkg/locomotive-tinymce-rails-#{TinyMCE::Rails::VERSION}.gem"
+end
 
 def step(name)
   print "#{name} ..."
@@ -26,8 +31,8 @@ desc "Update TinyMCE to version specified in lib/tinymce/version.rb"
 task :update => [ :fetch, :extract, :process ]
 
 task :fetch do
-  download("https://github.com/downloads/tinymce/tinymce/tinymce_#{TinyMCE::TINYMCE_VERSION}.zip", "tinymce.zip")
-  download("https://github.com/downloads/tinymce/tinymce/tinymce_#{TinyMCE::TINYMCE_VERSION}_jquery.zip", "tinymce.jquery.zip")
+  download("https://github.com/downloads/tinymce/tinymce/tinymce_#{TinyMCE::VERSION}.zip", "tinymce.zip")
+  download("https://github.com/downloads/tinymce/tinymce/tinymce_#{TinyMCE::VERSION}_jquery.zip", "tinymce.jquery.zip")
 end
 
 task :extract do

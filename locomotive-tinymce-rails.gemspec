@@ -4,7 +4,7 @@ require 'tinymce/rails/version'
 
 Gem::Specification.new do |s|
   s.name = 'locomotive-tinymce-rails'
-  s.version = TinyMCE::VERSION
+  s.version = TinyMCE::Rails::VERSION
   s.summary = 'Rails 3.1 integration for TinyMCE.'
   s.description = 'Seamlessly integrates TinyMCE into the Rails 3.1 asset pipeline.'
   s.homepage    = 'https://github.com/locomotivecms/tinymce-rails'
