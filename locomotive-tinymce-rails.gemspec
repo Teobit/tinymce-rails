@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.authors = ['Sam Pohlenz', 'Didier Lafforgue']
   s.email = 'sam@sampohlenz.com'
 
-  s.add_dependency 'actionpack',  '~> 3.1.3'
+  s.add_dependency 'actionpack',  '~> 3.0'
 
   s.add_development_dependency 'rake', '0.9.2'
 end
