@@ -1,7 +1,7 @@
 module TinyMCE
-  VERSION   = '3.4.7.1'
+  VERSION   = '3.5.8'
 
   module Rails
-    VERSION = '3.4.7.5'
+    VERSION = '3.5.8.1'
   end
 end

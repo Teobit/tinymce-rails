@@ -5,3 +5,4 @@ sandbox/log
 sandbox/tmp
 sandbox/public/assets
 /pkg
+/vendor/assets/javascripts_old

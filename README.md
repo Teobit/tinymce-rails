@@ -1,7 +1,7 @@
-Rails 3.1 Integration for TinyMCE
+Rails 3.2 Integration for TinyMCE
 =================================
 
-The `tinymce-rails` gem integrates the [TinyMCE](http://www.tinymce.com/) editor with the Rails 3.1 asset pipeline.
+The `tinymce-rails` gem integrates the [TinyMCE](http://www.tinymce.com/) editor with the Rails 3.2 asset pipeline.
 
 
 Instructions
@@ -14,7 +14,7 @@ Instructions
 Then run `bundle install`.
 
 
-**2a. Use TinyMCE with the jQuery extension**
+**2. Use TinyMCE
 
 Add to your application.js:
 
@@ -29,24 +29,6 @@ and use TinyMCE in your view:
         $('textarea').tinymce({
           theme: 'advanced'
         });
-      });
-    </script>
-
-
-**2b. Use TinyMCE without jQuery**
-
-Add to your application.js:
-
-    //= require tinymce
-
-Use TinyMCE in your view:
-
-    <%= text_area_tag :editor, "", :rows => 40, :cols => 120 %>
-
-    <script type="text/javascript">
-      tinyMCE.init({
-        mode: 'textareas',
-        theme: 'advanced'
       });
     </script>
 

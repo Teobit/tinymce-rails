@@ -21,44 +21,43 @@ def step(name)
   puts " DONE"
 end
 
-def download(url, filename)
+def download(url, filename, params = nil)
   puts "Downloading #{url} ..."
+  form = params.nil? ? ' ' : "--data '#{params}'"
+  cmd = "curl #{form} -# -L '#{url}' -o tmp/#{filename}"
   `mkdir -p tmp`
-  `curl -L -# #{url} -o tmp/#{filename}`
+  `#{cmd}`
 end
 
 desc "Update TinyMCE to version specified in lib/tinymce/version.rb"
 task :update => [ :fetch, :extract, :process ]
 
 task :fetch do
-  download("https://github.com/downloads/tinymce/tinymce/tinymce_#{TinyMCE::VERSION}.zip", "tinymce.zip")
   download("https://github.com/downloads/tinymce/tinymce/tinymce_#{TinyMCE::VERSION}_jquery.zip", "tinymce.jquery.zip")
+
+  params = 'la_export=js&' + %w(de en es et fr it nl nb pl pt ru).map { |l| "la[]=#{l}" }.join('&')
+  download("http://www.tinymce.com/i18n/index.php?ctrl=export&act=zip", 'tinymce_language_pack.zip', params)
 end
 
 task :extract do
-  step "Extracting core files" do
-    `rm -rf tmp/tinymce`
-    `unzip -u tmp/tinymce.zip -d tmp`
-    `rm -rf vendor/assets/javascripts/tinymce`
-    `mkdir -p vendor/assets/javascripts/tinymce`
-    `mv tmp/tinymce/jscripts/tiny_mce/* vendor/assets/javascripts/tinymce/`
-  end
-
-  step "Extracting jQuery files" do
+  step "Extracting files" do
     `rm -rf tmp/tinymce`
     `unzip -u tmp/tinymce.jquery.zip -d tmp`
-    `mv tmp/tinymce/jscripts/tiny_mce/jquery.tinymce.js vendor/assets/javascripts/tinymce/jquery.tinymce.js`
-    `mv tmp/tinymce/jscripts/tiny_mce/tiny_mce.js vendor/assets/javascripts/tinymce/tiny_mce_jquery.js`
-    `mv tmp/tinymce/jscripts/tiny_mce/tiny_mce_src.js vendor/assets/javascripts/tinymce/tiny_mce_jquery_src.js`
+    `rm -rf vendor/assets/javascripts/tinymce`
+    `mv tmp/tinymce/jscripts/tiny_mce vendor/assets/javascripts/tinymce`
+  end
+
+  step "Extracting locales" do
+    `rm -rf tmp/tinymce_language_pack`
+    `unzip -u tmp/tinymce_language_pack.zip -d tmp`
+    `cp -R tmp/tinymce_language_pack/* vendor/assets/javascripts/tinymce/.`
   end
 end
 
 task :process do
   step "Fixing file encoding" do
-    require 'iconv'
-    converter = Iconv.new('UTF-8', 'ISO-8859-1')
     Dir["vendor/assets/javascripts/tinymce/**/*.js"].each do |file|
-      contents = converter.iconv(File.read(file)).force_encoding('UTF-8')
+      contents = File.read(file).encode('UTF-8', 'ISO-8859-1')
       File.open(file, 'w') { |f| f.write(contents) }
     end
   end
